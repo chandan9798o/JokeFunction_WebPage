@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JokeJunction</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url(minnion.jpg);
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .form_control {
+            width: 90%;
+            height: 550px;
+            max-width: 1000px;
+            padding: 20px;
+            border-radius: 20px;
+            border: 2px solid white;
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        h1 {
+            position: relative;
+            font-size: 60px;
+            border-radius: 20px;
+            border: 2px solid black;
+            background-color: rgb(172, 255, 255);
+            padding: 15px;
+        }
+
+        .sticker1,
+        .sticker2 {
+            position: absolute;
+            width: 80px;
+            top: 10px;
+        }
+
+        .sticker1 {
+            left: 20px;
+        }
+
+        .sticker2 {
+            right: 20px;
+        }
+
+        .joke-text {
+            margin-top: 30px;
+            font-size: 30px;
+            color: white;
+            min-height: 150px;
+            padding: 15px;
+        }
+
+        .button-container {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            margin-top: 30px;
+            font-size: 20px;
+            border-radius: 10px;
+            background-color: rgba(172, 255, 255);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            background-color: rgb(251, 255, 16);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+
+            h1 {
+                font-size: 35px;
+            }
+
+            .joke-text {
+                font-size: 20px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 8px 15px;
+            }
+
+            .sticker1,
+            .sticker2 {
+                width: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            .joke-text {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="form_control">
+        <h1>
+            JokeJunction
+            <img src="laugh.png" class="sticker1">
+            <img src="laugh.png" class="sticker2">
+        </h1>
+
+        <div id="jokeBox" class="joke-text"></div>
+
+        <div class="button-container">
+            <button onclick="prevJoke()">⬅️ Back</button>
+            <button onclick="nextJoke()">Next ➡️</button>
+        </div>
+    </div>
+
+    <script>
+        const jokes = [
+            `संता और एयर होस्टेस:
+            संता: एयर होस्टेस जी, आपकी शकल मेरी बीवी से बहुत मिलती है।
+            एयर होस्टेस: (थप्पड़ मार कर) तमीज से बात करो!
+            संता: लो! आदतें भी बिल्कुल वैसी ही हैं।`,
+
+            `गूगल वर्सेस बीवी:
+            पति: गूगल और बीवी में क्या फर्क है?
+            दोस्त: भाई, गूगल को कुछ बोलने तो देता है, बीवी तो सर्च पूरा होने से पहले ही 'Result' सुना देती है!`,
+
+            `पप्पू का दिमाग:
+            टीचर: "हिम्मत-ए-मर्दा तो मदद-ए-खुदा" का मतलब बताओ?
+            पप्पू: सर, अगर बीवी के सामने 'हिम्मत' दिखाई, तो फिर 'खुदा' ही मदद कर सकता है!`,
+
+            `इंजीनियरिंग का दर्द:
+            लड़का: पापा, मैं एक लड़की से प्यार करता हूँ।
+            पापा: क्या वो भी तुमसे प्यार करती है?
+            लड़का: पापा, मैं इंजीनियर हूँ, 'Output' की गारंटी नहीं दे सकता, बस 'Process' चालू है!`,
+
+            `शराबी का ज्ञान:
+             दोस्त: भाई, तू इतनी शराब क्यों पीता है? शराबी: भाई, गम भुलाने के लिए। दोस्त: तो क्या गम भूल जाते हैं? शराबी: कहाँ भाई, वो तो तैरना सीख गए हैं!,`,
+            `भिखारी और कंजूस: भिखारी: भगवान के नाम पर कुछ दे दो बाबा! कंजूस: शर्म नहीं आती? इतनी कम उम्र में भीख मांगते हो? 
+            भिखारी: तो क्या अब 500 रुपये की नौकरी के लिए 3 साल का 'Experience' लाऊं?`,
+
+            `पत्नी: सुनो जी, अगर मैं मर गई तो आप क्या करोगे?
+            पति: मैं भी मर जाऊँगा।
+            पत्नी: क्यों?
+            पति: इतनी खुशी मैं बर्दाश्त नहीं कर पाऊँगा!`,
+
+            `गांव का लड़का शहर में इंटरव्यू देने गया।
+            इंटरव्यूअर: “आपकी स्ट्रेंथ क्या है?”
+            लड़का: “सर, ट्रैक्टर चला लेता हूं, खेत जोत लेता हूं।”
+            इंटरव्यूअर: “हम IT कंपनी हैं!”
+            लड़का: “तो क्या हुआ सर, WiFi भी जोत दूं क्या?”`,
+
+            `बिहारी: ऑर्डर काहे नहीं पहुँचा बे? 🤨
+            Amazon वाला: देखिए सर, पहले तो आप नम्रता से बात कीजिए 😉
+            बिहारी: हाँ तो कराओ।
+            Amazon वाला: मेरा मतलब है, शांति से बात कीजिए 😉
+            बिहारी: हाँ तो दुर्जो से बात करवाओ, हम डरते हैं का बे!`,
+
+            `कोई आपको बेवकूफ कहे तो
+
+            परेशान मत होना,दुखी मत होना,
+            अफसोस मत करना,रोना भी नहीं,
+            और डरना भी मत।
+            हिम्मत से धीरे से कुर्सी पर बैठना और ठंडे दिमाग से सोचना — साले को पता कैसे चला?`
+        ];
+
+        let currentIndex = 0;
+
+        function showJoke() {
+            document.getElementById("jokeBox").innerText = jokes[currentIndex];
+        }
+
+        function nextJoke() {
+            if (currentIndex < jokes.length - 1) {
+                currentIndex++;
+                showJoke();
+            }
+        }
+
+        function prevJoke() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showJoke();
+            }
+        }
+
+        showJoke();
+    </script>
+
+</body>
+
+</html>
